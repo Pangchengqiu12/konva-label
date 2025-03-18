@@ -577,35 +577,39 @@ export default class KonvaLabel {
    */
   public createTransformer(rect: Shape<ShapeConfig> | Stage) {
     if (this.transformer) {
+      //取消选择
       this.transformer.nodes().forEach((i) => {
         i.draggable(false);
         i.setAttr(
           'fill',
           toRgba(i.getAttr('stroke'), this.labelConfig.fillOpacity)
-        );
+        ); //回复原来的颜色
       });
       this.transformer.destroy();
+      this.transformer = null;
       this.emitChange('update');
-    }
-    if (rect && rect.getClassName() === 'Rect') {
-      rect.draggable(true);
-      this.transformer = new Konva.Transformer({
-        rotateEnabled: true,
-        flipEnabled: false,
-        ignoreStroke: true,
-        keepRatio: false,
-        resizeEnabled: true,
-        anchorSize: 8,
-        zoomedIn: this.stage.scaleX() > 1,
-        boundBoxFunc: this.constrainSizes,
-      });
-      rect.setAttr(
-        'fill',
-        toRgba(rect.getAttr('stroke'), this.labelConfig.selectOpacity)
-      );
-      this.layer.add(this.transformer);
-      this.transformer.attachTo(rect);
-      this.layer.draw();
+    } else {
+      //选择选中的标注框
+      if (rect && rect.getClassName() === 'Rect') {
+        rect.draggable(true);
+        this.transformer = new Konva.Transformer({
+          rotateEnabled: true,
+          flipEnabled: false,
+          ignoreStroke: true,
+          keepRatio: false,
+          resizeEnabled: true,
+          anchorSize: 8,
+          zoomedIn: this.stage.scaleX() > 1,
+          boundBoxFunc: this.constrainSizes,
+        });
+        rect.setAttr(
+          'fill',
+          toRgba(rect.getAttr('stroke'), this.labelConfig.selectOpacity)
+        ); //选中时的颜色
+        this.layer.add(this.transformer);
+        this.transformer.attachTo(rect);
+        this.layer.draw();
+      }
     }
   }
   /**
