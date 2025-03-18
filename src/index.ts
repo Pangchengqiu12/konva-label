@@ -32,6 +32,9 @@ export default class KonvaCanvas {
   constructor({ el, onChange, labelConfig }: Konvalabel.KonvaConstructor) {
     this.stageContainer = el;
     const container = this.getStageContainerNode();
+    container.style.display = 'flex';
+    container.style.justifyContent = 'center';
+    container.style.alignItems = 'center';
     this.stage = new Konva.Stage({
       container: container,
       width: container.clientWidth,
@@ -609,7 +612,7 @@ export default class KonvaCanvas {
    * 修改选中透明度
    * @param {number} opacity 透明度
    */
-  public updateSelectOpacity(number) {
+  public updateSelectOpacity(number: number) {
     this.labelConfig.selectOpacity = number;
     const transformerNodes = this.getTransformerNodes();
     transformerNodes.length &&
