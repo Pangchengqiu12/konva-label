@@ -28,5 +28,10 @@
   "repository": {
     "type": "git",
     "url": "https://github.com/Pangchengqiu12/vue-label"
-  }
+  },
+  "files": [
+    "lib/**/*",
+    "README.md",
+    "LICENSE"
+  ]
 }
