@@ -1,5 +1,5 @@
 import Konva from 'konva';
-import Konvalabel from './index.d';
+import Konvalabel from './types';
 /**
  * 已知等腰三角形的底边长度、底边和腰的夹角，求顶点到底边的高。
  *

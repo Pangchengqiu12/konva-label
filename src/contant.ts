@@ -1,4 +1,4 @@
-import Konvalabel from './index.d';
+import Konvalabel from './types';
 export const LABEL_CONFIG: Konvalabel.LabelConfig = {
   color: 'rgb(255, 0, 0)',
   fillOpacity: 0.2,

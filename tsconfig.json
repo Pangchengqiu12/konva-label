@@ -1,23 +1,15 @@
 {
   "compilerOptions": {
-    "outDir": "lib",
-    "module": "CommonJS",
-    "target": "ES2018",
-    // "sourceMap": true,
-    "noEmitOnError": true,
-    "lib": ["ES2019", "dom"],
-    "moduleResolution": "node",
-    "declaration": true,
-    "removeComments": false,
-
+    "target": "es2015",
+    "module": "commonjs",
     "strict": true,
+    "esModuleInterop": true,
+    "rootDir": "./src",
+    "outDir": "./lib",
+    "sourceMap": false,
+    "declaration": true,
+    "declarationMap": false,
     "noImplicitAny": false,
-    "noImplicitThis": false,
-    "useUnknownInCatchVariables": false,
-    "skipLibCheck": true,
-    // probably we would never enable this one
-    // because it's too strict, konva generates many functions on the runtime
-    "strictPropertyInitialization": false
-  },
-  "include": ["./src/**/*.ts"]
+    "noImplicitThis": false
+  }
 }

@@ -1,6 +1,6 @@
 import Konva from 'konva';
 import { debounce } from './utils';
-import Konvalabel from './index.d';
+import Konvalabel from './types';
 import {
   imageOnLoad,
   getRelativePointerPosition,
@@ -14,7 +14,7 @@ import { LABEL_CONFIG } from './contant';
 import type { Shape, ShapeConfig } from 'konva/lib/Shape';
 import type { Stage } from 'konva/lib/Stage';
 
-export default class KonvaCanvas {
+export default class KonvaLabel {
   public stage: Konva.Stage; //舞台
   public layer: Konva.Layer; //图层
   public stageContainer: string; //舞台（节点）的id
