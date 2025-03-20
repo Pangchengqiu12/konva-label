@@ -657,6 +657,7 @@ export default class KonvaLabel {
     if (find) {
       find.attrs.data = data;
       this.updateText(find);
+      this.emitChange('update');
     }
   }
   /**
