@@ -1,0 +1,51 @@
+{
+  "name": "konva-label",
+  "version": "1.0.07",
+  "description": "一个用于图片标注的javascript库，基于canvas，简单轻量，支持矩形、多边形、点、折线、圆形、网格。",
+  "main": "lib/konva-label.min.js",
+  "types": "lib/index.d.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "cross-env NODE_ENV=development rollup -c -w",
+    "build": "cross-env NODE_ENV=production rollup -c"
+  },
+  "files": [
+    "/lib"
+  ],
+  "keywords": [
+    "canvas",
+    "konva",
+    "label",
+    "标注",
+    "图像标注"
+  ],
+  "author": "li_li",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.26.10",
+    "@rollup/plugin-babel": "^6.0.4",
+    "@rollup/plugin-json": "^6.1.0",
+    "@typescript-eslint/eslint-plugin": "^4.28.4",
+    "@typescript-eslint/parser": "^4.28.4",
+    "cross-env": "^7.0.3",
+    "rollup": "^4.29.1",
+    "rollup-plugin-livereload": "^2.0.5",
+    "rollup-plugin-serve": "^3.0.0",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.36.0",
+    "tslib": "^2.8.1",
+    "typescript": "^5.8.2"
+  },
+  "homepage": "https://github.com/Pangchengqiu12/konva-label",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Pangchengqiu12/konva-label"
+  },
+  "volta": {
+    "node": "22.14.0",
+    "npm": "11.2.0"
+  },
+  "dependencies": {
+    "konva": "^9.3.20"
+  }
+}

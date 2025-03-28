@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0"
+    />
+    <title>canvas-select示例</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .box {
+        display: flex;
+        height: 100vh;
+      }
+
+      #container {
+        background-color: #ccc;
+        width: 90%;
+        height: 60%;
+      }
+      .left,
+      .right {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+      .right {
+        margin-left: 20px;
+      }
+
+      #output {
+        height: 60%;
+        width: 90%;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="box">
+      <div class="left">
+        <div id="container"></div>
+        <!-- <canvas class="container"></canvas> -->
+        <div>
+          <button onclick="draw()">创建矩形</button>
+          <button onclick="dele()">删除所选</button>
+          <button onclick="cancelDraw()">取消绘制</button>
+
+          <button onclick="resetZoom()">重置缩放位置</button>
+          <button onclick="destroy()">销毁</button>
+          <br />
+          <input type="color" onchange="updateColor(event)" />
+        </div>
+      </div>
+      <div class="right">
+        <div>output:</div>
+        <textarea id="output"></textarea>
+      </div>
+    </div>
+    <script src="https://unpkg.com/konva@9/konva.min.js"></script>
+    <script src="./lib/konva-label.min.js"></script>
+    <script>
+      const konvaLabel = new KonvaLabel({
+        el: 'container',
+        onChange,
+      });
+      konvaLabel.loadImage(
+        'https://n.sinaimg.cn/www/transform/300/w660h440/20240318/3875-37fb8533570d8661d3f547c7e3b0ddde.jpg',
+        [
+          {
+            label: '测试',
+            id: '1743146880836',
+            box: [
+              305.85379004865047, 115.02742230347299, 660, 267.86106032906713,
+            ],
+          },
+        ]
+      );
+      function draw() {
+        konvaLabel.draw({
+          label: '测试',
+        });
+      }
+      function dele() {
+        konvaLabel.deleteSelected();
+      }
+      function resetZoom() {
+        konvaLabel.resetZoom();
+      }
+      function cancelDraw() {
+        konvaLabel.cancelDraw();
+      }
+      function updateColor(e) {
+        const rects = konvaLabel.getAllRect();
+        const texts = konvaLabel.getAllText();
+        rects.forEach((item, index) => {
+          item.setAttr('stroke', e.target.value);
+          item.setAttr(
+            'fill',
+            toRgba(e.target.value, konvaLabel.labelConfig.fillOpacity)
+          );
+          texts[index].setAttr('fill', e.target.value);
+        });
+      }
+      function onChange(data) {
+        document.getElementById('output').value = JSON.stringify(data, null, 2);
+      }
+      function destroy() {
+        konvaLabel.destroy();
+      }
+
+      const toRgba = (color, alpha = 1) => {
+        let r, g, b;
+        if (color.startsWith('#')) {
+          let hex = color.slice(1);
+          if (hex.length === 3) {
+            hex = hex
+              .split('')
+              .map((x) => x + x)
+              .join('');
+          }
+          [r, g, b] = [0, 2, 4].map((start) =>
+            parseInt(hex.slice(start, start + 2), 16)
+          );
+        } else if (color.startsWith('rgb')) {
+          [r, g, b] = color.match(/\d+/g).map(Number);
+        } else if (color.startsWith('hsl')) {
+          const [h, s, l] = color.match(/\d+/g).map(Number);
+          // 将 HSL 转换为 RGB
+          const hue = h / 360;
+          const saturation = s / 100;
+          const lightness = l / 100;
+
+          if (saturation === 0) {
+            r = g = b = Math.round(lightness * 255);
+          } else {
+            const hue2rgb = (p, q, t) => {
+              if (t < 0) t += 1;
+              if (t > 1) t -= 1;
+              if (t < 1 / 6) return p + (q - p) * 6 * t;
+              if (t < 1 / 2) return q;
+              if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+              return p;
+            };
+
+            const q =
+              lightness < 0.5
+                ? lightness * (1 + saturation)
+                : lightness + saturation - lightness * saturation;
+            const p = 2 * lightness - q;
+
+            r = Math.round(hue2rgb(p, q, hue + 1 / 3) * 255);
+            g = Math.round(hue2rgb(p, q, hue) * 255);
+            b = Math.round(hue2rgb(p, q, hue - 1 / 3) * 255);
+          }
+        } else {
+          throw new Error('Invalid color format');
+        }
+        return `rgba(${r}, ${g}, ${b}, ${Math.max(0, Math.min(1, alpha))})`;
+      };
+    </script>
+  </body>
+</html>
