@@ -85,18 +85,37 @@ class KonvaLabel {
 }
 ```
 
-### 配置项
+### 类型
 
 ```typescript
-interface LabelConfig {
-  color?: string; // 标注框颜色
-  fillOpacity?: number; // 填充透明度
-  selectOpacity?: number; // 选中时的透明度
-  strokeWidth?: number; // 边框宽度
-  fontSize?: number; // 文本大小
-  textGap?: number; // 文本和标注框的间距
-}
-interface EmitData {
+import Konva from 'konva';
+declare namespace Konvalabel {
+  export interface LabelInfo {
+    label?: string;
+    color?: string;
+    [key: string]: any;
+  }
+  export interface BboxesItem {
+    id?: number | string;
+    label: string;
+    box: BoxType; //x1 y1 x2 y2
+    [key: string]: any;
+  }
+  export type BoxType = [number, number, number, number];
+  export interface KonvaConstructor {
+    el: string;
+    onChange?: OnChange;
+    labelConfig?: LabelConfig;
+  }
+  export interface LabelConfig {
+    color?: string; //标注框颜色
+    fillOpacity?: number; //填充透明度
+    selectOpacity?: number; //选中时的透明度
+    strokeWidth?: number; // 边框宽度
+    fontSize?: number; // 文字大小
+    textGap?: number; //文本和标注框的间距
+  }
+  export interface EmitData {
     id: number | string;
     label: string;
     box: BoxType; //x1 y1 x2 y2
@@ -104,6 +123,22 @@ interface EmitData {
     text: Konva.Text;
     [key: string]: any;
   }
+  export type OnChange = (ChangeParams) => void | null;
+  export interface ChangeParams {
+    type: ChangeType;
+    data: EmitData[];
+  }
+  export type ChangeType = 'update' | 'add' | 'delete' | 'init';
+
+  export interface XYWH {
+    width: number;
+    height: number;
+    x: number;
+    y: number;
+  }
+}
+export default Konvalabel;
+
 ```
 
 ### 方法
