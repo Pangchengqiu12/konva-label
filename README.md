@@ -22,13 +22,13 @@ npm install konva-label
 
 ## 使用示例
 
-```javascript
+```ts
 import KonvaLabel from 'konva-label';
 
 // 初始化标注实例
 const label = new KonvaLabel({
   el: 'container', // 容器ID
-  onChange: (data) => {
+  onChange: (data:EmitData) => {
     console.log('标注数据变化：', data);
   },
   labelConfig: {
@@ -96,6 +96,14 @@ interface LabelConfig {
   fontSize?: number; // 文本大小
   textGap?: number; // 文本和标注框的间距
 }
+interface EmitData {
+    id: number | string;
+    label: string;
+    box: BoxType; //x1 y1 x2 y2
+    rect: Konva.Rect;
+    text: Konva.Text;
+    [key: string]: any;
+  }
 ```
 
 ### 方法
