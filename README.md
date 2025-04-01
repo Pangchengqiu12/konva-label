@@ -1,139 +1,141 @@
-## 基于 konva 实现图像标注
+# konva-label
+
+一个基于Konva.js的图片标注工具库，提供简单易用的API接口，支持图片加载、缩放、标注框绘制和编辑等功能。
 
 [演示地址](https://konva-label-demo.pages.dev/#/preview)
 
-快速开始
+## 功能特性
 
-安装：
+- 支持图片加载和自适应显示
+- 支持画布拖拽和缩放
+- 支持矩形标注框的绘制
+- 支持标注框的选择、拖动、缩放和旋转
+- 支持标注框的删除
+- 支持标注框样式自定义（颜色、透明度等）
+- 支持标注数据的导入和导出
+
+## 安装
 
 ```bash
-npm i konva-label
+npm install konva-label
 ```
 
-使用：
+## 使用示例
 
-```js
+```javascript
 import KonvaLabel from 'konva-label';
-// 1.实例化
-let konva = new KonvaLabel({
-  el: 'konvaLabel', //节点的id
+
+// 初始化标注实例
+const label = new KonvaLabel({
+  el: 'container', // 容器ID
+  onChange: (data) => {
+    console.log('标注数据变化：', data);
+  },
+  labelConfig: {
+    color: '#ff0000', // 标注框颜色
+    fillOpacity: 0.3, // 填充透明度
+    selectOpacity: 0.5, // 选中时的透明度
+    strokeWidth: 1, // 边框宽度
+    fontSize: 12, // 文本大小
+    textGap: 5, // 文本和标注框的间距
+  }
 });
-// 2.加载图片
-konva.loadImage(img, []); //参数1：图片地址或者是Img实列，参数2：标注框类型是BboxesItem
-// 3.销毁
-konva.destroy();
+
+// 加载图片
+label.loadImage('path/to/image.jpg');
+
+// 开始绘制标注
+label.draw({
+  label: '标签1',
+  color: '#ff0000'
+});
+
+// 取消绘制
+label.cancelDraw();
+
+// 删除选中的标注
+label.deleteSelected();
+
+// 重置缩放
+label.resetZoom();
 ```
 
-类型：
+## API文档
 
-```ts
-declare namespace Konvalabel {
-  export interface LabelInfo {
-    label: string; //标签名称
-    color?: string; //标签颜色
-  }
-  export interface BboxesItem {
-    id: number;
-    score: number;
-    className: string;
-    box: BoxType;
-    classId: number;
-    rect: Konva.Rect;
-    text: Konva.Text;
-  }
-  export type BoxType = [number, number, number, number]; //x1 y1 x2 y2
-  export interface KonvaConstructor {
-    el: string;
-    onChange?: OnChange; //回调事件，比如新增，修改，删除会触发
-    labelConfig?: LabelConfig;
-  }
-  export interface LabelConfig {
-    color?: string;
-    fillOpacity?: number; //填充透明度
-    selectOpacity?: number; //选中时的透明度
-    strokeWidth?: number;
-    fontSize?: number;
-    textGap?: number; //文本和标注框的间距
-  }
-  export type OnChange = (ChangeParams) => void | null;
-  export interface ChangeParams {
-    type: ChangeType;
-    data: BboxesItem[];
-  }
-  export type ChangeType = 'update' | 'add' | 'delete' | 'init';
+### 构造函数
 
-  export interface XYWH {
-    width: number;
-    height: number;
-    x: number;
-    y: number;
-  }
+```typescript
+new KonvaLabel(options: {
+  el: string; // 容器ID
+  onChange?: (data: { type: string; data: BboxesItem[] }) => void; // 数据变化回调
+  labelConfig?: LabelConfig; // 标注配置
+})
+```
+
+### 实例属性
+
+```typescript
+class KonvaLabel {
+  stage: Konva.Stage; // 舞台实例，用于管理整个画布
+  layer: Konva.Layer; // 图层实例，用于管理所有标注元素
+  image: HTMLImageElement | null; // 当前加载的图片元素
+  zoomRatio: number; // 图片的缩放比例
+  bboxes: BboxesItem[]; // 标注框数组
+  labelConfig: LabelConfig; // 标注配置项
 }
-export default Konvalabel;
 ```
 
-## 获取所有标注框
+### 配置项
 
-```ts
-konva.getAllRect();
+```typescript
+interface LabelConfig {
+  color?: string; // 标注框颜色
+  fillOpacity?: number; // 填充透明度
+  selectOpacity?: number; // 选中时的透明度
+  strokeWidth?: number; // 边框宽度
+  fontSize?: number; // 文本大小
+  textGap?: number; // 文本和标注框的间距
+}
 ```
 
-## 获取所有文本
+### 方法
 
-```ts
-konva.getAllText();
-```
+#### loadImage(img: HTMLImageElement | string, bboxes?: BboxesItem[]): Promise<string>
+加载图片并初始化标注数据
 
-## 获取选中的节点
+#### draw(labelInfo: LabelInfo): void
+开始绘制标注
 
-```ts
-konva.getTransformerNodes();
-```
+#### cancelDraw(): void
+取消绘制
 
-## 取消绘制标注框
+#### deleteSelected(): void
+删除选中的标注
 
-```ts
-konva.cancelDraw();
-```
+#### deleteById(id: string): void
+通过ID删除标注
 
-## 绘制标注框
+#### updateLabelName(id: string | number, data: LabelInfo): void
+更新标注名称
 
-```ts
-konva.draw(labelInfo: Konvalabel.LabelInfo)
-```
+#### updateSelectOpacity(number: number): void
+更新选中标注的透明度
 
-## 删除选中的标注框
+#### updateFillOpacity(number: number): void
+更新标注填充透明度
 
-```ts
-konva.deleteSelected();
-```
+#### resetZoom(): void
+重置画布缩放
 
-## 手动选中标注框
+#### getAllRect(): Array<Konva.Rect>
+获取所有标注框
 
-```ts
-konva.createTransformer(rect: Shape<ShapeConfig> | Stage)
-```
+#### getAllText(): Array<Konva.Text>
+获取所有文本标签
 
-## 修改选中透明度
+#### getTransformerNodes(): Array<Konva.Rect>
+获取选中的节点
 
-```ts
-konva.updateSelectOpacity(number: number)
-```
+## 许可证
 
-## 修改填充透明度
-
-```ts
-konva.updateFillOpacity(number: number)
-```
-
-## 修改对应的标注框的 label
-
-```ts
-konva.updateLabelName(id: string | number, data: Konvalabel.LabelInfo)
-```
-
-## 重置缩放大小和位置
-
-```ts
-konva.resetZoom();
-```
+MIT
