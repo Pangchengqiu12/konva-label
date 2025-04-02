@@ -1,6 +1,6 @@
 {
   "name": "konva-label",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "基于konvajs实现的图片标注工具，提供简单易用的API接口，支持图片加载、缩放、标注框绘制和编辑等功能。",
   "main": "lib/konva-label.min.js",
   "types": "lib/index.d.ts",
